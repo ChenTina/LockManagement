@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    <mapper namespace="com.bed_lock.mapper.userDao">
+
+    <select id="findall" resultType="com.bed_lock.bean.User">
+		select * from wuser
+	</select>
+	
+	<select id="findallmark" resultType="com.bed_lock.bean.Mark">
+		select * from mark
+	</select>
+	
+	<select id="findallcommunity" resultType="com.bed_lock.bean.Community">
+		select * from communitys
+	</select>
+	
+	<update id="updateCtime" parameterType="com.bed_lock.bean.User">
+    	update wuser set ctime=#{ctime},cstatus=#{cstatus}  where tel=#{tel}
+    </update>
+    
+    
+   <!--  按照客户名称筛选查询 -->
+    <select id="queryUserByname" parameterType="String" resultType="com.bed_lock.bean.User">
+        select * from wuser where name=#{name}
+    </select>
+    
+     <!--  按照人员类别查询 -->
+    <select id="queryUserByuser" parameterType="String" resultType="com.bed_lock.bean.User">
+        select * from wuser where usertype=#{usertype}
+    </select>
+    
+    <select id="queryUserByuser1" resultType="com.bed_lock.bean.User">
+        select * from wuser where usertype="常住人员"
+    </select>
+    
+    <select id="queryUserByuser2" resultType="com.bed_lock.bean.User">
+        select * from wuser where usertype="租户"
+    </select>
+    
+    <select id="queryUserByuser3" resultType="com.bed_lock.bean.User">
+        select * from wuser where usertype="访客"
+    </select>
+    
+     <!--  按照门名称查询 -->
+    <select id="queryUserBydoorname" parameterType="String" resultType="com.bed_lock.bean.Mark">
+        select * from mark where doorname=#{doorname}
+    </select>
+    
+    <!--  按照小区名称查询 -->
+    <select id="queryUserBycommunityname" parameterType="String" resultType="com.bed_lock.bean.Mark">
+        select * from  communitys where name=#{name}
+    </select>
+    
+    <!-- 按照时段查询 -->
+       <select id="queryUserByCtime" parameterType="java.util.HashMap" resultType="com.bed_lock.bean.Mark">
+        select * from mark where <![CDATA[ctime>=str_to_date(#{startTime},'%Y-%m-%d') AND ctime<str_to_date(#{endTime},'%Y-%m-%d')]]>
+
+    </select>  
+    
+    <!--  按照身份证查询 -->
+    <select id="queryUserByidcard" parameterType="String" resultType="com.bed_lock.bean.User">
+        select idcard from wuser where idcard=#{idcard}
+    </select>  
+    
+    
+    
+    <!--  按照性别筛选查询 -->
+    <select id="queryUserBySex" parameterType="String" resultType="com.bed_lock.bean.User">
+        select * from wuser where sex=#{sex}
+    </select>
+    
+    <!--  按照年龄段筛选查询 -->
+      <select id="queryUserByAge" parameterType="java.util.HashMap" resultType="com.bed_lock.bean.User">
+        select * from wuser where age&gt;=#{ages} and age&lt;=#{agee}
+    </select>  
+    
+    <!--  按照被查人姓名、身份证号精准查询 -->
+     <select id="queryUserBynnc" parameterType="java.util.HashMap" resultType="com.bed_lock.bean.User">
+        select * from wuser where  name=#{name} and idcard=#{idcard}
+    </select>
+    
+    <!-- 客户注册 -->
+    <insert id="insertUser" parameterType="com.bed_lock.bean.User">
+        insert into wuser(name,sex,age,usertype,community,tel,email,idcard) values(#{name},#{sex},#{age},#{user},#{community},#{tel},#{email},#{idcard})
+    </insert>
+    
+    <insert id="insert" parameterType="com.bed_lock.bean.User">
+        insert into wuser(name,sex,idcard,address,image) values(#{name},#{sex},#{idcard},#{address},#{image})
+    </insert>
+    
+     <insert id="insertuser" parameterType="com.bed_lock.bean.User">
+        insert into wuser(name,sex,idcard,usertype,age,community,tel) values(#{name},#{sex},#{idcard},#{usertype},#{age},#{community},#{tel})
+    </insert>
+    
+    <insert id="insertctime" parameterType="com.bed_lock.bean.Mark">
+        insert into mark(name,tel,cstatus,ctime,usertype,community,doorname) values(#{name},#{tel},#{cstatus},#{ctime},#{usertype},#{community},#{doorname})
+    </insert>
+    
+    
+    
+    <!-- 小区名称和人员类型查询 -->
+    <select id="queryUserBycomanduser" parameterType="java.util.HashMap" resultType="com.bed_lock.bean.User">
+        select * from  wuser where usertype=#{usertype} and community=#{community}
+    </select>
+    
+    <!--  按照客户名称筛选查询 -->
+    <select id="queryUserByusername" parameterType="java.util.HashMap" resultType="com.bed_lock.bean.User">
+        select * from wuser where name=#{name} and usertype=#{usertype} and community=#{community}
+    </select>
+    
+    <!--  按照性别筛选查询 -->
+    <select id="queryUserByuserSex" parameterType="java.util.HashMap" resultType="com.bed_lock.bean.User">
+        select * from wuser where sex=#{sex} and usertype=#{usertype} and community=#{community}
+    </select>
+    
+    <!--  按照年龄段筛选查询 -->
+      <select id="queryUserByuserAge" parameterType="java.util.HashMap" resultType="com.bed_lock.bean.User">
+        select * from wuser where age&gt;=#{ages} and age&lt;=#{agee} and usertype=#{usertype} and community=#{community}
+    </select>
+    
+     <!--  按照被查人姓名、身份证号精准查询 -->
+     <select id="queryUserByusernnc" parameterType="java.util.HashMap" resultType="com.bed_lock.bean.User">
+        select * from wuser where  name=#{name} and idcard=#{idcard} and usertype=#{usertype} and community=#{community}
+    </select>
+     
+     <!--  按照小区名称和门名称查询 -->
+    <select id="querymark" parameterType="java.util.HashMap" resultType="com.bed_lock.bean.Mark">
+        select * from mark where doorname=#{doorname} and community=#{community}
+    </select>
+    
+    <!--  按照小区名称和门名称和客户姓名查询 -->
+    <select id="querymarkByname" parameterType="java.util.HashMap" resultType="com.bed_lock.bean.Mark">
+        select * from mark where name=#{name} and doorname=#{doorname} and community=#{community}
+    </select>
+    
+    <!--  按照小区名称和门名称和人员类别查询 -->
+    <select id="querymarkByusertype" parameterType="java.util.HashMap" resultType="com.bed_lock.bean.Mark">
+        select * from mark where community=#{community} and doorname=#{doorname} and usertype=#{usertype}
+    </select>
+    
+    <!-- 按照小区名称和门名称和时段查询 -->
+       <select id="querymarkByCtime" parameterType="java.util.HashMap" resultType="com.bed_lock.bean.Mark">
+        select * from mark where community=#{community} and doorname=#{doorname} and <![CDATA[ctime>=str_to_date(#{startTime},'%Y-%m-%d') AND ctime<=str_to_date(#{endTime},'%Y-%m-%d')]]>
+    </select> 
+    
+    	<!-- 模糊查询 -->
+    	<select id="mohuquery"  resultType="com.bed_lock.bean.User">
+    		select * from wuser where name like  '%' #{jjj} '%'
+    	</select>
+    </mapper>
+
+
